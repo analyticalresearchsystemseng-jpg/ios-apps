@@ -11,6 +11,12 @@ platform :ios do
       in_house: false
     )
 
+    # Update project team
+    update_project_team(
+      path: "App/App.xcodeproj",
+      teamid: ENV["ASC_TEAM_ID"]
+    )
+
     # Build the app with signing
     build_app(
       workspace: "App/App.xcworkspace",
