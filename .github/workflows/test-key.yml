@@ -1,0 +1,17 @@
+name: Test API Key
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check API Key
+        env:
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          echo "Key length: ${#ASC_KEY_P8}"
+          echo "$ASC_KEY_P8" | base64 -d > /tmp/key.p8
+          echo "Decoded size: $(wc -c < /tmp/key.p8)"
+          head -1 /tmp/key.p8

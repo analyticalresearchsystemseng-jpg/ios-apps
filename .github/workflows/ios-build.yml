@@ -51,8 +51,11 @@ jobs:
         env:
           ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
         run: |
+          echo "Decoding API key..."
           echo "$ASC_KEY_P8" | base64 -d > ios/AuthKey.p8
-          echo "Key file created, size: $(wc -c < ios/AuthKey.p8) bytes"
+          echo "Key file created"
+          ls -la ios/AuthKey.p8
+          head -1 ios/AuthKey.p8
       
       - name: Build and Upload
         env:
@@ -62,4 +65,8 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
         run: |
           cd ios
+          echo "Current directory: $(pwd)"
+          echo "Files:"
+          ls -la
+          echo "Running fastlane..."
           fastlane build_and_upload
