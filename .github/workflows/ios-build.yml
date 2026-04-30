@@ -54,20 +54,15 @@ jobs:
           cd ../..
       
       - name: Decode API Key
-      - name: Set Development Team
-        run: |
-          cd ios/App
-          sed -i "s/DEVELOPMENT_TEAM = ""/DEVELOPMENT_TEAM = \"$ASC_TEAM_ID\"/" App.xcodeproj/project.pbxproj
-          echo "Set team ID: $ASC_TEAM_ID"
-          grep "DEVELOPMENT_TEAM" App.xcodeproj/project.pbxproj | head -1
         env:
           ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          ASC_TEAM_ID: ${{ secrets.ASC_TEAM_ID }}
         run: |
-          echo "Decoding API key..."
           echo "$ASC_KEY_P8" | base64 -d > ios/AuthKey.p8
-          echo "Key file created"
           ls -la ios/AuthKey.p8
-          head -1 ios/AuthKey.p8
+          echo "Setting development team..."
+          sed -i "s/DEVELOPMENT_TEAM = \"\"/DEVELOPMENT_TEAM = \"$ASC_TEAM_ID\"/" ios/App/App.xcodeproj/project.pbxproj
+          grep "DEVELOPMENT_TEAM" ios/App/App.xcodeproj/project.pbxproj | head -1
       
       - name: Build and Upload
         env:
