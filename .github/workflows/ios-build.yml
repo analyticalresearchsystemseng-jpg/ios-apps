@@ -47,6 +47,12 @@ jobs:
       - name: Install Fastlane
         run: gem install fastlane
       
+      - name: Install CocoaPods
+        run: |
+          cd ios/App
+          pod install --repo-update
+          cd ../..
+      
       - name: Decode API Key
         env:
           ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}

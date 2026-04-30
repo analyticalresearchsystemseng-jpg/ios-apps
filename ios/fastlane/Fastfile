@@ -14,7 +14,7 @@ platform :ios do
     # For now, build without signing to verify the pipeline works
     # TODO: Add match or manual signing for TestFlight upload
     build_app(
-      project: "App/App.xcodeproj",
+      workspace: "App/App.xcworkspace",
       scheme: "App",
       destination: "platform=iOS Simulator,name=iPhone 16",
       skip_package_ipa: true,
