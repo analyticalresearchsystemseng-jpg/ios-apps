@@ -77,4 +77,4 @@ jobs:
           echo "Files:"
           ls -la
           echo "Running fastlane..."
-          fastlane build_and_upload
+          fastlane build
