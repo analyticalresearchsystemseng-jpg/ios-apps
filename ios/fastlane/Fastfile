@@ -11,24 +11,22 @@ platform :ios do
       in_house: false
     )
 
-    # For now, build without signing to verify the pipeline works
-    # TODO: Add match or manual signing for TestFlight upload
+    # Build the app with signing
     build_app(
       workspace: "App/App.xcworkspace",
       scheme: "App",
-      destination: "platform=iOS Simulator,name=iPhone 16",
-      skip_package_ipa: true,
-      skip_archive: true,
-      skip_codesigning: true,
-      xcargs: "CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO",
+      export_method: "app-store",
+      export_team_id: ENV["ASC_TEAM_ID"],
+      xcargs: "-allowProvisioningUpdates",
       output_directory: "build",
-      output_name: "TestApp"
+      output_name: "TestApp.ipa"
     )
 
-    UI.success("Build succeeded! Signing and upload skipped.")
-    UI.important("To enable TestFlight upload:")
-    UI.important("1. Run: fastlane match appstore")
-    UI.important("2. Remove skip_codesigning and destination from build_app")
-    UI.important("3. Add: upload_to_testflight(api_key: api_key)")
+    # Upload to TestFlight
+    upload_to_testflight(
+      api_key: api_key,
+      skip_waiting_for_build_processing: true,
+      notify_external_testers: false
+    )
   end
 end
