@@ -11,6 +11,13 @@ platform :ios do
       in_house: false
     )
 
+    # Enable automatic code signing
+    automatic_code_signing(
+      path: "App/App.xcodeproj",
+      use_automatic_signing: true,
+      team_id: ENV["ASC_TEAM_ID"]
+    )
+
     # Build the app with automatic signing
     build_app(
       project: "App/App.xcodeproj",
