@@ -1,22 +1,8 @@
-require 'base64'
-
 default_platform(:ios)
 
 platform :ios do
   desc "Build and upload to TestFlight"
   lane :build_and_upload do
-    # Decode the base64 key content
-    key_base64 = ENV["ASC_KEY_P8"]
-    if key_base64.nil? || key_base64.empty?
-      UI.error("ASC_KEY_P8 environment variable is not set")
-      raise "Missing ASC_KEY_P8"
-    end
-    
-    key_content = Base64.decode64(key_base64)
-    
-    # Write to file
-    File.write("AuthKey.p8", key_content)
-    
     # Set up App Store Connect API key
     api_key = app_store_connect_api_key(
       key_id: ENV["ASC_KEY_ID"],
@@ -24,27 +10,6 @@ platform :ios do
       key_filepath: "AuthKey.p8",
       in_house: false
     )
-
-    # Try to find or create the app
-    begin
-      app = Spaceship::ConnectAPI::App.find("com.neilross.testapp")
-      if app
-        UI.success("Found existing app: #{app.name}")
-      else
-        UI.important("App not found, creating...")
-        app = Spaceship::ConnectAPI::App.create(
-          name: "TestApp",
-          bundle_id: "com.neilross.testapp",
-          platforms: [Spaceship::ConnectAPI::Platform::IOS],
-          primary_locale: "en-US"
-        )
-        UI.success("Created app: #{app.name}")
-      end
-    rescue => e
-      UI.error("Failed to find/create app: #{e.message}")
-      UI.error("Please create the app manually at https://appstoreconnect.apple.com")
-      raise
-    end
 
     # Build the app with automatic signing
     build_app(
