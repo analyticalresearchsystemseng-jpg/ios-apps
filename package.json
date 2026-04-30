@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "TestApp",
   "scripts": {
-    "build": "mkdir -p dist/testapp/browser && cp src/index.html dist/testapp/browser/ && cp src/main.ts dist/testapp/browser/ 2>/dev/null || true",
+    "build": "ng build",
     "start": "ng serve",
     "sync": "npx cap sync ios",
     "open-ios": "npx cap open ios"
