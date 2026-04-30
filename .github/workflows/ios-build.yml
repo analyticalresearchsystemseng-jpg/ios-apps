@@ -61,7 +61,8 @@ jobs:
           echo "$ASC_KEY_P8" | base64 -d > ios/AuthKey.p8
           ls -la ios/AuthKey.p8
           echo "Setting development team..."
-          sed -i "s/DEVELOPMENT_TEAM = \"\"/DEVELOPMENT_TEAM = \"$ASC_TEAM_ID\"/" ios/App/App.xcodeproj/project.pbxproj
+          sed -i.bak "s/DEVELOPMENT_TEAM = \"\"/DEVELOPMENT_TEAM = \"$ASC_TEAM_ID\"/" ios/App/App.xcodeproj/project.pbxproj
+          rm ios/App/App.xcodeproj/project.pbxproj.bak
           grep "DEVELOPMENT_TEAM" ios/App/App.xcodeproj/project.pbxproj | head -1
       
       - name: Build and Upload
