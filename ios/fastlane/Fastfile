@@ -11,30 +11,37 @@ platform :ios do
       in_house: false
     )
 
-    # Enable automatic code signing
-    automatic_code_signing(
+    # Update code signing settings
+    update_code_signing_settings(
       path: "App/App.xcodeproj",
-      use_automatic_signing: true,
-      team_id: ENV["ASC_TEAM_ID"]
+      use_automatic_signing: false,
+      team_id: ENV["ASC_TEAM_ID"],
+      bundle_identifier: "com.neilross.testapp",
+      code_sign_identity: "iPhone Distribution",
+      profile_name: "match AppStore com.neilross.testapp"
     )
 
-    # Build the app with automatic signing
+    # Build the app (skip signing for now)
     build_app(
       project: "App/App.xcodeproj",
       scheme: "App",
       export_method: "app-store",
       export_team_id: ENV["ASC_TEAM_ID"],
       xcargs: "-allowProvisioningUpdates",
-      skip_package_pkg: true,
+      skip_package_ipa: true,
+      skip_codesigning: true,
       output_directory: "build",
       output_name: "TestApp.ipa"
     )
 
-    # Upload to TestFlight
-    upload_to_testflight(
-      api_key: api_key,
-      skip_waiting_for_build_processing: true,
-      notify_external_testers: false
-    )
+    # Note: For TestFlight upload, you need:
+    # 1. App identifier registered in Apple Developer Portal
+    # 2. Provisioning profiles created
+    # 3. Match or manual signing setup
+    # 
+    # To enable upload, remove skip_codesigning and set up match:
+    # match(type: "appstore", api_key: api_key)
+    #
+    # Then upload_to_testflight(api_key: api_key, ...)
   end
 end
